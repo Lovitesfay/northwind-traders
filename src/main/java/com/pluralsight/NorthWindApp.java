@@ -32,17 +32,22 @@ public class NorthWindApp {
             while (true) {
                 // menu
                 System.out.println(" ");
-                System.out.println("""
+                System.out.print("""
                         What do you want to do?
                         
                         1) Display All Products
+                        2) Display all Customers
                         0) Exit application
+                        Select an option : 
                         """);
 
                 // user's chose
                 switch (input.nextInt()) {
                     case 1:
                         displayAllProducts(connection);
+                        break;
+                    case 2:
+                        displayAllCustomers(connection);
                         break;
                     case 0:
                         System.out.println("See you Later");
@@ -91,6 +96,45 @@ public class NorthWindApp {
                 System.out.println("can't get all Products " + e.getMessage());
             }
         }
+
+    public static void displayAllCustomers(Connection connection)
+    {
+
+        String sql = """
+                         select
+                             ContactName,
+                             CompanyName,
+                             City,
+                             Country,
+                             Phone
+                         from
+                             customers
+                             order by 
+                                    Country;
+                      """;
+
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet results = stmt.executeQuery()) {
+            System.out.printf("%-25s %-35s %-20s %-20s %-20s%n",
+                    "ContactName", "CompanyName", "City", "Country", "Phone");
+            System.out.println("----------------------------------------------------------------");
+
+            while (results.next()) {
+                System.out.printf("%-25s %-35s %-20s %-20s %-20s%n",
+                        results.getString("ContactName"),
+                        results.getString("CompanyName"),
+                        results.getString("City"),
+                        results.getString("Country"),
+                        results.getString("Phone")
+                );
+
+            }
+        } catch(SQLException e){
+            System.out.println("can't get all Customers " + e.getMessage());
+        }
+    }
+
 
     //this method will be used in the displayMethods to actually print the results to the screen
     public static void printResults(ResultSet results) throws SQLException {
