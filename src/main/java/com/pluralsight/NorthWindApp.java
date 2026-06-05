@@ -31,10 +31,12 @@ public class NorthWindApp {
 
             while (true) {
                 // menu
+                System.out.println(" ");
                 System.out.println("""
                         What do you want to do?
-                            1) Display All Products
-                            0) Exit application
+                        
+                        1) Display All Products
+                        0) Exit application
                         """);
 
                 // user's chose
@@ -65,21 +67,30 @@ public class NorthWindApp {
                              ProductID,
                              ProductName,
                              UnitPrice,
-                             UnitsInStock,
-                             UnitsInOrder
+                             UnitsInStock
                          from
                              products;
                 """;
 
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
-            ResultSet results = stmt.executeQuery();
-        ){  printResults(results);
+             ResultSet results = stmt.executeQuery()) {
+            System.out.printf("%-5s %-35s %-10s %-10s%n",
+                    "ID", "Product Name", "Price", "Stock");
+            System.out.println("----------------------------------------------------------------");
 
+            while (results.next()) {
+                System.out.printf("%-5d %-35s $%-9.2f %-10d%n",
+                        results.getInt("ProductID"),
+                        results.getString("ProductName"),
+                        results.getDouble("UnitPrice"),
+                        results.getInt("UnitsInStock"));
 
-        } catch (SQLException e) {
-            System.out.println("can't get all Products " + e.getMessage());
-        }}
+            }
+            } catch(SQLException e){
+                System.out.println("can't get all Products " + e.getMessage());
+            }
+        }
 
     //this method will be used in the displayMethods to actually print the results to the screen
     public static void printResults(ResultSet results) throws SQLException {
@@ -104,4 +115,5 @@ public class NorthWindApp {
             //print an empty line to make the results prettier
             System.out.println();
 
-        }}}
+        }}
+}
