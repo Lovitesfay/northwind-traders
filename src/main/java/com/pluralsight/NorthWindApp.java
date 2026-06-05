@@ -37,6 +37,7 @@ public class NorthWindApp {
                         
                         1) Display All Products
                         2) Display all Customers
+                        3) Display all Categories
                         0) Exit application
                         Select an option : 
                         """);
@@ -49,6 +50,8 @@ public class NorthWindApp {
                     case 2:
                         displayAllCustomers(connection);
                         break;
+                    case 3:
+                        displayAllCategories(connection);
                     case 0:
                         System.out.println("See you Later");
                         System.exit(0);
@@ -97,8 +100,7 @@ public class NorthWindApp {
             }
         }
 
-    public static void displayAllCustomers(Connection connection)
-    {
+    public static void displayAllCustomers(Connection connection) {
 
         String sql = """
                          select
@@ -135,6 +137,38 @@ public class NorthWindApp {
         }
     }
 
+    public static void displayAllCategories(Connection connection){
+
+        String sql = """
+                         select
+                             CategoryID,
+                             CategoryName,
+                             Description,
+                             Picture
+                         from
+                             categories
+                      """;
+
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet results = stmt.executeQuery()) {
+            System.out.printf("%-25s %-35s %-20s %-20s",
+                    "CategoryID", "CategoryName", "Description", "Picture");
+            System.out.println("----------------------------------------------------------------");
+
+            while (results.next()) {
+                System.out.printf("%-25s %-35s %-20s %-20s",
+                        results.getString("CategoryID"),
+                        results.getString("CategoryName"),
+                        results.getString("Description"),
+                        results.getString("Picture")
+                );
+
+            }
+        } catch(SQLException e){
+            System.out.println("can't get all Customers " + e.getMessage());
+        }
+    }
 
     //this method will be used in the displayMethods to actually print the results to the screen
     public static void printResults(ResultSet results) throws SQLException {
@@ -161,3 +195,6 @@ public class NorthWindApp {
 
         }}
 }
+
+
+
