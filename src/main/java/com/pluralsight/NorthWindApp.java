@@ -52,6 +52,7 @@ public class NorthWindApp {
                         break;
                     case 3:
                         displayAllCategories(connection);
+                        break;
                     case 0:
                         System.out.println("See you Later");
                         System.exit(0);
@@ -152,16 +153,17 @@ public class NorthWindApp {
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet results = stmt.executeQuery()) {
-            System.out.printf("%-25s %-35s %-20s %-20s",
+            System.out.printf("%-12s %-20s %-50s %-20s%n",
                     "CategoryID", "CategoryName", "Description", "Picture");
             System.out.println("----------------------------------------------------------------");
 
             while (results.next()) {
-                System.out.printf("%-25s %-35s %-20s %-20s",
-                        results.getString("CategoryID"),
+                byte[] picture = results.getBytes("Picture");
+                System.out.printf("%-12s %-20s %-50s %-20s%n",
+                        results.getInt("CategoryID"),
                         results.getString("CategoryName"),
                         results.getString("Description"),
-                        results.getString("Picture")
+                        picture != null? "Has Image" : "No Image"
                 );
 
             }
