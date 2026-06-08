@@ -140,6 +140,12 @@ public class NorthWindApp {
 
     public static void displayAllCategories(Connection connection){
 
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter CategoryID : ");
+        input.nextInt();
+
+
         String sql = """
                          select
                              CategoryID,
@@ -148,6 +154,8 @@ public class NorthWindApp {
                              Picture
                          from
                              categories
+                         where
+                             CategoryID = ?
                       """;
 
 
