@@ -143,7 +143,7 @@ public class NorthWindApp {
         Scanner input = new Scanner(System.in);
 
         System.out.print("Enter CategoryID : ");
-        input.nextInt();
+        int categoryId = input.nextInt();
 
 
         String sql = """
@@ -161,6 +161,7 @@ public class NorthWindApp {
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet results = stmt.executeQuery()) {
+            stmt.setInt(1, categoryId);
             System.out.printf("%-12s %-20s %-50s %-20s%n",
                     "CategoryID", "CategoryName", "Description", "Picture");
             System.out.println("----------------------------------------------------------------");
